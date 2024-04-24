@@ -1,15 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
     public GameObject token1, token2, token3;
     private int[,] GameMatrix; //0 not chosen, 1 player, 2 enemy
     private int[] startPos = new int[2];
-    private int[] objectivePos = new int[2];
+    public int[] objectivePos = new int[2];
+
+    List<Node> listOberta = new List<Node>();
+    List<Node> listTancada = new List<Node>();
+    private void Start()
+    {
+        listOberta.AddRange(next(new Node(startPos, null)));
+    }
+    public Node[] next(Node node)
+    {
+        Node[] nodes = new Node[4];
+        nodes[0] = new Node(new int[] { node.position[0] + 1, node.position[1]},node);
+        nodes[1] = new Node(new int[] { node.position[0] - 1, node.position[1]},node);
+        nodes[2] = new Node(new int[] { node.position[0], node.position[1] - 1},node);
+        nodes[3] = new Node(new int[] { node.position[0], node.position[1] + 1},node);
+
+
+
+        return nodes;
+    }
     private void Awake()
     {
+        instance = this;
         GameMatrix = new int[Calculator.length, Calculator.length];
 
         for (int i = 0; i < Calculator.length; i++) //fila
@@ -28,12 +50,12 @@ public class GameManager : MonoBehaviour
 
         InstantiateToken(token1, startPos);
         InstantiateToken(token2, objectivePos);
+
         ShowMatrix();
     }
     private void InstantiateToken(GameObject token, int[] position)
     {
-        Instantiate(token, Calculator.GetPositionFromMatrix(position),
-            Quaternion.identity);
+        Instantiate(token, Calculator.GetPositionFromMatrix(position), Quaternion.identity);
     }
     private void SetObjectivePoint(int[] startPos) 
     {
