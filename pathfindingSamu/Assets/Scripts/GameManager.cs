@@ -13,9 +13,13 @@ public class GameManager : MonoBehaviour
 
     List<Node> listOberta = new List<Node>();
     List<Node> listTancada = new List<Node>();
+
     private void Start()
     {
         listOberta.AddRange(next(new Node(startPos, null)));
+
+        // Pintar token3 en las cuatro direcciones adyacentes
+        PaintToken3InAllDirections(startPos);
     }
     public Node[] next(Node node)
     {
@@ -24,8 +28,6 @@ public class GameManager : MonoBehaviour
         nodes[1] = new Node(new int[] { node.position[0] - 1, node.position[1]},node);
         nodes[2] = new Node(new int[] { node.position[0], node.position[1] - 1},node);
         nodes[3] = new Node(new int[] { node.position[0], node.position[1] + 1},node);
-
-
 
         return nodes;
     }
@@ -49,6 +51,7 @@ public class GameManager : MonoBehaviour
         GameMatrix[objectivePos[0], objectivePos[1]] = 2;
 
         InstantiateToken(token1, startPos);
+        
         InstantiateToken(token2, objectivePos);
 
         ShowMatrix();
@@ -67,7 +70,6 @@ public class GameManager : MonoBehaviour
             objectivePos[1] = rand2;
         }
     }
-
     private void ShowMatrix() //fa un debug log de la matriu
     {
         string matrix = "";
@@ -84,13 +86,67 @@ public class GameManager : MonoBehaviour
     //EL VOSTRE EXERCICI COMENÇA AQUI
     private void Update()
     {
-        if(!EvaluateWin())
+        if (!EvaluateWin())
         {
+            Node[] adjacentNodes = next(new Node(startPos, null));
 
+            // Inicializar la distancia mínima y el nodo con la distancia mínima
+            float minDistance = Mathf.Infinity;
+            Node minNode = null;
+
+            // Calcular la distancia mínima entre los nodos adyacentes y el objetivo final
+            foreach (Node node in adjacentNodes)
+            {
+                float distanceToObjective = node.heuristica;
+                if (distanceToObjective < minDistance)
+                {
+                    minDistance = distanceToObjective;
+                    minNode = node;
+                    if (minDistance == 0)
+                    {
+                        //Debug.Log("Has ganado!");
+                        return;
+                    }
+                }
+            }
+            if (minNode != null)
+            {
+                listTancada.Add(minNode);
+                foreach (Node node in listTancada)
+                {
+                    Debug.Log("Posición del nodo: " + node.position[0] + ", " + node.position[1]);
+                    Debug.Log("Heurística del nodo: " + node.heuristica);
+                    Debug.Log("Costo del nodo: " + node.coste);
+                    Debug.Log("Total: "+ node.heuristica + node.coste);
+                    Debug.Log("---------------------------------------");
+                }
+
+                MovePlayerToPosition(minNode.position);
+                PaintToken3InAllDirections(minNode.position);
+            }
         }
+    }
+    private void MovePlayerToPosition(int[] newPosition)
+    {
+        startPos = newPosition;
     }
     private bool EvaluateWin()
     {
         return false;
+    }
+    private void PaintToken3InAllDirections(int[] position)
+    {
+        int[][] directions = new int[][] { new int[] { 1, 0 }, new int[] { -1, 0 }, new int[] { 0, -1 }, new int[] { 0, 1 } };
+
+        foreach (var dir in directions)
+        {
+            int newX = position[0] + dir[0];
+            int newY = position[1] + dir[1];
+
+            if (newX >= 0 && newX < Calculator.length && newY >= 0 && newY < Calculator.length)
+            {
+                InstantiateToken(token3, new int[] { newX, newY });
+            }
+        }
     }
 }
