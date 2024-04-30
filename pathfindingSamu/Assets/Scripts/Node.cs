@@ -19,9 +19,9 @@ public class Node
     // Método para calcular la distancia Manhattan entre dos puntos
     private float CalculateManhattanDistance(int[] point1, int[] point2)
     {
-        int dx = Mathf.Abs(point1[0] - point2[0]); // Diferencia en filas
-        int dy = Mathf.Abs(point1[1] - point2[1]); // Diferencia en columnas
-        return dx + dy; // Suma de las diferencias
+        int dx = Mathf.Abs(point1[0] - point2[0]); 
+        int dy = Mathf.Abs(point1[1] - point2[1]); 
+        return dx + dy; 
     }
 
 

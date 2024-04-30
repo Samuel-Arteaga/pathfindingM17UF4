@@ -111,18 +111,21 @@ public class GameManager : MonoBehaviour
             }
             if (minNode != null)
             {
+                //listOberta.Add(minNode);
                 listTancada.Add(minNode);
+                Debug.Log("lista tancada: " + listTancada.Count);
                 foreach (Node node in listTancada)
                 {
                     Debug.Log("Posición del nodo: " + node.position[0] + ", " + node.position[1]);
                     Debug.Log("Heurística del nodo: " + node.heuristica);
                     Debug.Log("Costo del nodo: " + node.coste);
-                    Debug.Log("Total: "+ node.heuristica + node.coste);
-                    Debug.Log("---------------------------------------");
+                    //Debug.Log("Total: "+ node.heuristica + node.coste);
+                    Debug.Log("!!-------------------------------------------!!");
                 }
-
                 MovePlayerToPosition(minNode.position);
                 PaintToken3InAllDirections(minNode.position);
+                //listOberta.Add(minNode);
+                //Debug.Log("lista Oberta: "+ listOberta.Count);
             }
         }
     }
@@ -134,6 +137,7 @@ public class GameManager : MonoBehaviour
     {
         return false;
     }
+
     private void PaintToken3InAllDirections(int[] position)
     {
         int[][] directions = new int[][] { new int[] { 1, 0 }, new int[] { -1, 0 }, new int[] { 0, -1 }, new int[] { 0, 1 } };
@@ -146,6 +150,8 @@ public class GameManager : MonoBehaviour
             if (newX >= 0 && newX < Calculator.length && newY >= 0 && newY < Calculator.length)
             {
                 InstantiateToken(token3, new int[] { newX, newY });
+                
+
             }
         }
     }
