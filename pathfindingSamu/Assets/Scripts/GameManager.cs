@@ -16,18 +16,25 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        listOberta.AddRange(next(new Node(startPos, null)));
-
-        // Pintar token3 en las cuatro direcciones adyacentes
+        Node initialNode = new Node(startPos, null);
+        listOberta.Add(initialNode);
+        Node[] adjacentNodes = next(initialNode);
+        foreach (Node node in adjacentNodes)
+        {
+            if (!listOberta.Contains(node))
+            {
+                listOberta.Add(node);
+            }
+        }
         PaintToken3InAllDirections(startPos);
     }
     public Node[] next(Node node)
     {
         Node[] nodes = new Node[4];
-        nodes[0] = new Node(new int[] { node.position[0] + 1, node.position[1]},node);
-        nodes[1] = new Node(new int[] { node.position[0] - 1, node.position[1]},node);
-        nodes[2] = new Node(new int[] { node.position[0], node.position[1] - 1},node);
-        nodes[3] = new Node(new int[] { node.position[0], node.position[1] + 1},node);
+        nodes[0] = new Node(new int[] { node.position[0] + 1, node.position[1] }, node);
+        nodes[1] = new Node(new int[] { node.position[0] - 1, node.position[1] }, node);
+        nodes[2] = new Node(new int[] { node.position[0], node.position[1] - 1 }, node);
+        nodes[3] = new Node(new int[] { node.position[0], node.position[1] + 1 }, node);
 
         return nodes;
     }
@@ -90,11 +97,9 @@ public class GameManager : MonoBehaviour
         {
             Node[] adjacentNodes = next(new Node(startPos, null));
 
-            // Inicializar la distancia mínima y el nodo con la distancia mínima
             float minDistance = Mathf.Infinity;
             Node minNode = null;
 
-            // Calcular la distancia mínima entre los nodos adyacentes y el objetivo final
             foreach (Node node in adjacentNodes)
             {
                 float distanceToObjective = node.heuristica;
@@ -104,25 +109,33 @@ public class GameManager : MonoBehaviour
                     minNode = node;
                     if (minDistance == 0)
                     {
-                        //Debug.Log("Has ganado!");
+                        //Debug.Log("Has ganado");
                         return;
                     }
                 }
             }
             if (minNode != null)
             {
+                //listOberta.Add(minNode);
                 listTancada.Add(minNode);
+                Debug.Log("lista tancada: " + listTancada.Count);
                 foreach (Node node in listTancada)
                 {
                     Debug.Log("Posición del nodo: " + node.position[0] + ", " + node.position[1]);
                     Debug.Log("Heurística del nodo: " + node.heuristica);
                     Debug.Log("Costo del nodo: " + node.coste);
-                    Debug.Log("Total: "+ node.heuristica + node.coste);
+<<<<<<< HEAD
                     Debug.Log("---------------------------------------");
+                    
+=======
+                    //Debug.Log("Total: "+ node.heuristica + node.coste);
+                    Debug.Log("!!-------------------------------------------!!");
+>>>>>>> 5aac45dde135d9cfcaeb4931b2807fba2ff345a2
                 }
-
                 MovePlayerToPosition(minNode.position);
                 PaintToken3InAllDirections(minNode.position);
+                //listOberta.Add(minNode);
+                //Debug.Log("lista Oberta: "+ listOberta.Count);
             }
         }
     }
@@ -134,6 +147,7 @@ public class GameManager : MonoBehaviour
     {
         return false;
     }
+
     private void PaintToken3InAllDirections(int[] position)
     {
         int[][] directions = new int[][] { new int[] { 1, 0 }, new int[] { -1, 0 }, new int[] { 0, -1 }, new int[] { 0, 1 } };
@@ -146,6 +160,8 @@ public class GameManager : MonoBehaviour
             if (newX >= 0 && newX < Calculator.length && newY >= 0 && newY < Calculator.length)
             {
                 InstantiateToken(token3, new int[] { newX, newY });
+                
+
             }
         }
     }
