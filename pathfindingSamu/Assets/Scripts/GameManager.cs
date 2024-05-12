@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -90,11 +89,9 @@ public class GameManager : MonoBehaviour
         {
             Node[] adjacentNodes = next(new Node(startPos, null));
 
-            // Inicializar la distancia mínima y el nodo con la distancia mínima
             float minDistance = Mathf.Infinity;
             Node minNode = null;
 
-            // Calcular la distancia mínima entre los nodos adyacentes y el objetivo final
             foreach (Node node in adjacentNodes)
             {
                 float distanceToObjective = node.heuristica;
@@ -111,7 +108,7 @@ public class GameManager : MonoBehaviour
             }
             if (minNode != null)
             {
-                //listOberta.Add(minNode);
+     
                 listTancada.Add(minNode);
                 Debug.Log("lista tancada: " + listTancada.Count);
                 foreach (Node node in listTancada)
@@ -119,13 +116,12 @@ public class GameManager : MonoBehaviour
                     Debug.Log("Posición del nodo: " + node.position[0] + ", " + node.position[1]);
                     Debug.Log("Heurística del nodo: " + node.heuristica);
                     Debug.Log("Costo del nodo: " + node.coste);
-                    //Debug.Log("Total: "+ node.heuristica + node.coste);
                     Debug.Log("!!-------------------------------------------!!");
                 }
                 MovePlayerToPosition(minNode.position);
                 PaintToken3InAllDirections(minNode.position);
                 //listOberta.Add(minNode);
-                //Debug.Log("lista Oberta: "+ listOberta.Count);
+               
             }
         }
     }

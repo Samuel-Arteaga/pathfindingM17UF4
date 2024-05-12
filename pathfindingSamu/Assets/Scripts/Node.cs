@@ -12,11 +12,11 @@ public class Node
     public Node(int[] position, Node padre)
     {
         this.position = position;
-        this.heuristica = CalculateManhattanDistance(position, GameManager.instance.objectivePos); // Calcula la distancia Manhattan
-        this.coste = (padre != null) ? padre.coste + 1 : 0; // Inicializa el costo (el costo del padre más 1)
+        this.heuristica = CalculateManhattanDistance(position, GameManager.instance.objectivePos); 
+        this.coste = (padre != null) ? padre.coste + 1 : 0; // Inicializa el costo normal y (el costo del padre más 1)
         this.hijo = null;
     }
-    // Método para calcular la distancia Manhattan entre dos puntos
+
     private float CalculateManhattanDistance(int[] point1, int[] point2)
     {
         int dx = Mathf.Abs(point1[0] - point2[0]); 
